@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=miniflux
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./miniflux-db:/var/lib/postgresql/data
+  app:
+    image: miniflux/miniflux:latest
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://miniflux:secret@db/miniflux?sslmode=disable
+      - RUN_MIGRATIONS=1
+      - CREATE_ADMIN=1
+      - ADMIN_USERNAME=zac
+      - ADMIN_PASSWORD=QYmpUKZGU4hyuuTKZ2XC
+  proxy:
+    image: abiosoft/caddy
+    restart: always
+    environment:
+      - ACME_AGREE=true
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - app
+    volumes:
+      - "./Caddyfile:/etc/Caddyfile"
+      - "./.caddy:/root/.caddy"
