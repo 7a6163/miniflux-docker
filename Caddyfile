@@ -1,5 +1,5 @@
-https://rss.imz.ac {
-    tls mymengyu@gmail.com
+https://{$URL} {
+    tls {$EMAIL}
 
     proxy / app:8080 {
         header_upstream Host {host}
