@@ -2,11 +2,8 @@ https://{$URL} {
     tls {$EMAIL}
 
     proxy / app:8080 {
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-For {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-      }
+        transparent
+    }
 
     log /var/log/caddy.log
     gzip
